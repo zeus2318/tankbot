@@ -1,8 +1,6 @@
 import discord
 import string
 import random
-import youtube_dl
-
 
 from discord.ext import commands
 
