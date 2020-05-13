@@ -1,12 +1,10 @@
 import discord
 import string
 import random
-import os
-import sys
+import youtube_dl
 
 
 from discord.ext import commands
-from discord import FFmpegPCMAudio
 
 
 client = commands.Bot(command_prefix = 't!')
@@ -16,7 +14,7 @@ players = {}
 
 @client.event
 async def on_ready():
-    await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name="t!help"))
+    await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name="Movie"))
     print(f'\nLogged in as {client.user.name}#{client.user.discriminator}, User ID: {client.user.id}, Version: {discord.__version__}\n')
 
 @client.event
@@ -124,7 +122,7 @@ async def help(ctx):
 
 
     await ctx.send(embed=embed)
-    
+
 @client.command(pass_contex=True)
 async def join(ctx):
     channel = ctx.author.voice.channel
@@ -140,19 +138,7 @@ async def play(ctx, url):
     voice_client = client.voice_client_in(server)
     player = await voice_client.create_ytdl_player(url)
     players[server.id] = player
-    player.start   
-    
-@client.command()
-async def Owner(ctx):
-    embed = discord.Embed(
-        colour = discord.Colour.gold()
-    )
-
-    embed.set_author(name='Owner:')
-    embed.add_field(name='Owner of the bot:', value='Zeus#2318', inline=False)
-
-
-    await ctx.send(embed=embed)
+    player.start()
 
 
 client.run('NzA3MDU2NTgzMDAzMDc4Nzg3.XrZBOQ.RLAcA9srlJLdREgYXddl0gBbOoU')
