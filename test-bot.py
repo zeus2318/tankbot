@@ -121,7 +121,6 @@ async def help(ctx):
     embed.add_field(name='t!ping', value='Returns Pong!', inline=False)
     embed.add_field(name='t!userinfo', value='It gives the info of the specific user', inline=False)
     embed.add_field(name='t!ask', value='Ask anything!', inline=False)
-    embed.add_field(nvalue='Made by: Zeus#2318', inline=False)
 
 
     await ctx.send(embed=embed)
@@ -141,7 +140,19 @@ async def play(ctx, url):
     voice_client = client.voice_client_in(server)
     player = await voice_client.create_ytdl_player(url)
     players[server.id] = player
-    player.start    
+    player.start   
+    
+@client.command()
+async def Owner(ctx):
+    embed = discord.Embed(
+        colour = discord.Colour.gold()
+    )
+
+    embed.set_author(name='Owner:')
+    embed.add_field(name='Owner of the bot:', value='Zeus#2318', inline=False)
+
+
+    await ctx.send(embed=embed)
 
 
 client.run('NzA3MDU2NTgzMDAzMDc4Nzg3.XrZBOQ.RLAcA9srlJLdREgYXddl0gBbOoU')
