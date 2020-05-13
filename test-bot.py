@@ -16,7 +16,7 @@ players = {}
 
 @client.event
 async def on_ready():
-    await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name="t!help"))
+    await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name="Zeus Cuz he pro"))
     print(f'\nLogged in as {client.user.name}#{client.user.discriminator}, User ID: {client.user.id}, Version: {discord.__version__}\n')
 
 @client.event
@@ -124,6 +124,23 @@ async def help(ctx):
 
 
     await ctx.send(embed=embed)
+    
+@client.command(pass_contex=True)
+async def join(ctx):
+    channel = ctx.author.voice.channel
+    await channel.connect()
+
+@client.command(pass_contex=True)
+async def leave(ctx):
+    await ctx.voice_client.disconnect()
+
+@client.command(pass_context=True)
+async def play(ctx, url):
+    server = ctx.message.server
+    voice_client = client.voice_client_in(server)
+    player = await voice_client.create_ytdl_player(url)
+    players[server.id] = player
+    player.start    
 
 
 client.run('NzA3MDU2NTgzMDAzMDc4Nzg3.XrZBOQ.RLAcA9srlJLdREgYXddl0gBbOoU')
