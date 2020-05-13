@@ -16,7 +16,7 @@ players = {}
 
 @client.event
 async def on_ready():
-    await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name="Zeus Cuz he pro"))
+    await client.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name="t!help"))
     print(f'\nLogged in as {client.user.name}#{client.user.discriminator}, User ID: {client.user.id}, Version: {discord.__version__}\n')
 
 @client.event
@@ -121,6 +121,7 @@ async def help(ctx):
     embed.add_field(name='t!ping', value='Returns Pong!', inline=False)
     embed.add_field(name='t!userinfo', value='It gives the info of the specific user', inline=False)
     embed.add_field(name='t!ask', value='Ask anything!', inline=False)
+    embed.add_field(nvalue='Made by: Zeus#2318', inline=False)
 
 
     await ctx.send(embed=embed)
