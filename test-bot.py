@@ -1,6 +1,8 @@
 import discord
 import string
 import random
+import youtube_dl
+import ffmpeg
 
 from discord.ext import commands
 
@@ -125,18 +127,68 @@ async def help(ctx):
 async def join(ctx):
     channel = ctx.author.voice.channel
     await channel.connect()
+    await ctx.send('Connected to the voice channel!')
 
 @client.command(pass_contex=True)
 async def leave(ctx):
     await ctx.voice_client.disconnect()
+    await ctx.send('Disconnected to the voice channel!')
 
-@client.command(pass_context=True)
-async def play(ctx, url):
-    server = ctx.message.server
-    voice_client = client.voice_client_in(server)
-    player = await voice_client.create_ytdl_player(url)
-    players[server.id] = player
-    player.start()
+@client.command(pass_contex=True)
+async def pause(ctx):
+    voice = get(client.voice_clients, guild=ctx.guild)
 
+    if voice and voice.is_playing():
+        print('Music Paused')
+        voice.pause
+        await ctx.send('Music Paused!')
+
+    else:
+        print('Music not playing failed pause')
+        await ctx.send('Music is not playing failed to pause!')
+
+@client.command(pass_context=True, aliases=['p', 'pla'])
+async def play(ctx, url: str):
+
+    song_there = os.path.isfile("song.mp3")
+    try:
+        if song_there:
+            os.remove("song.mp3")
+            print("Removed old song file")
+    except PermissionError:
+        print("Trying to delete song file, but it's being played")
+        await ctx.send("ERROR: Music playing")
+        return
+
+    await ctx.send("Getting everything ready now")
+
+    voice = get(client.voice_clients, guild=ctx.guild)
+
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+    }
+
+    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+        print("Downloading audio now\n")
+        ydl.download([url])
+
+    for file in os.listdir("./"):
+        if file.endswith(".mp3"):
+            name = file
+            print(f"Renamed File: {file}\n")
+            os.rename(file, "song.mp3")
+
+    voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: print("Song done!"))
+    voice.source = discord.PCMVolumeTransformer(voice.source)
+    voice.source.volume = 1
+
+    nname = name.rsplit("-", 2)
+    await ctx.send(f"Playing: {nname[0]}")
+    print("playing\n")
 
 client.run('NzA3MDU2NTgzMDAzMDc4Nzg3.XrZBOQ.RLAcA9srlJLdREgYXddl0gBbOoU')
