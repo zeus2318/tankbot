@@ -2,6 +2,7 @@ import discord
 import string
 import random
 import youtube_dl
+import os
 import ffmpeg
 
 from discord.ext import commands
