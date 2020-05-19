@@ -1,5 +1,6 @@
 discord.py
 asyncio
+ffmpeg
 ffmpeg.exe
 ffplay.exe
 ffprobe.exe
